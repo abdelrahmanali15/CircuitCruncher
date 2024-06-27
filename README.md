@@ -79,7 +79,7 @@ if __name__ == '__main__':
     save_fet_vars(df.columns, saveVars, '/path/to/save_test_analog.spi')
 ```
 
-### AC Analysis
+### AC Analysis  _(unfinished)_
 The script `ac_analysis.py` performs AC analysis and calculates parameters like bandwidth, gain, and phase margin.
 
 ```python
@@ -115,9 +115,9 @@ The `lib` folder contains utility functions for data processing and analysis.
 
 ### `data_processing.py`
 - `lookup(lookup_array, lookup_value, lookup_return_array)`: Linear interpolation function.
-- `measure_ac_parameters(frequencies, vout)`: Calculates AC parameters.
-- `calculate_propagation_delay(time, vout, threshold_ratio=0.5)`: Calculates propagation delay.
-- `calculate_cmrr(time, vout, vin, Vvdd, Vcm_min, Vcm_max)`: Calculates Common-Mode Rejection Ratio (CMRR).
+- `measure_ac_parameters(frequencies, vout)`: Calculates AC parameters. _(unfinished)_
+- `calculate_propagation_delay(time, vout, threshold_ratio=0.5)`: Calculates propagation delay. _(unfinished)_
+- `calculate_cmrr(time, vout, vin, Vvdd, Vcm_min, Vcm_max)`: Calculates Common-Mode Rejection Ratio (CMRR). _(unfinished)_
 - `op_sim(df, output_file='output.txt', html=True, additional_vars=None, custom_expressions=None)`: Extracts and displays operating point parameters.
 - `get_fet(columns)`: Extracts transistor names from columns.
 - `save_fet_vars(columns, variables, filename='save.spi')`: Generates a SPICE save file.
