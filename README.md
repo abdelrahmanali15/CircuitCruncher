@@ -27,8 +27,8 @@ This repository contains Python scripts and modules to perform various analyses 
 ## Installation
 1. Clone the repository:
    ```bash
-   git clone https://github.com/yourusername/circuit-simulation-analysis-tools.git
-   cd circuit-simulation-analysis-tools
+   git clone https://github.com/abdelrahmanali15/CircuitCruncher
+   cd CircuitCruncher
    ```
 2. Install the required packages:
    ```bash
