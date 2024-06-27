@@ -32,6 +32,76 @@ def lookup(lookup_array: np.ndarray, lookup_value: float, lookup_return_array: n
         return np.interp(lookup_value, lookup_array, lookup_return_array)
 
 
+def measure_ac_parameters(frequencies, vout):
+    vout_mag = np.abs(vout)
+    vout_db = 20 * np.log10(vout_mag)
+    vout_phase_margin = np.angle(vout, deg=True) + 180
+
+    # Find the index closest to 1 kHz
+    idx_1kHz = np.argmin(np.abs(frequencies - 10))
+    A0 = vout_mag[idx_1kHz]
+    A0_db = vout_db[idx_1kHz]
+
+    # Unity gain frequency
+    ugf = np.interp(1, vout_mag[::-1], frequencies[::-1])
+
+    # Find the index closest to the unity gain frequency
+    idx_ugf = np.argmin(np.abs(frequencies - ugf))
+    PM = vout_phase_margin[idx_ugf]
+
+    # Calculate the 3 dB bandwidth
+    BW_3dB_freqs = frequencies[vout_db >= (A0_db - 3)]
+    if len(BW_3dB_freqs) > 0:
+        BW_3dB = BW_3dB_freqs[-1] - BW_3dB_freqs[0]
+    else:
+        BW_3dB = None
+
+    # Calculate Gain-Bandwidth Product (GBW)
+    GBW = A0 * ugf
+
+
+    return {
+        "vout_mag": vout_mag,
+        "vout_db": vout_db,
+        "vout_phase_margin": vout_phase_margin,
+        "A0": A0,
+        "A0_db": A0_db,
+        "UGF": ugf,
+        "PM": PM,
+        "BW_3dB": abs(BW_3dB),
+        "GBW": (GBW)
+    }
+
+
+'''example Usage
+# Call the function with data
+ac_parameters = measure_ac_parameters(frequencies, vout)
+
+# Accessing the returned data
+vout_mag = ac_parameters["vout_mag"]
+vout_db = ac_parameters["vout_db"]
+vout_phase_margin = ac_parameters["vout_phase_margin"]
+A0 = ac_parameters["A0"]
+A0_db = ac_parameters["A0_db"]
+UGF = ac_parameters["UGF"]
+PM = ac_parameters["PM"]
+BW_3dB = ac_parameters["BW_3dB"]
+GBW = ac_parameters["GBW"]
+
+# Print the results
+print("vout_mag:", vout_mag)
+print("vout_db:", vout_db)
+print("vout_phase_margin:", vout_phase_margin)
+print("A0:", A0)
+print("A0_db:", A0_db)
+print("UGF:", UGF)
+print("PM:", PM)
+print("BW_3dB:", BW_3dB)
+print("GBW:", GBW)
+'''
+
+
+
 def op_sim(df, output_file='output.txt', html=True, additional_vars=None, custom_expressions=None):
     """
     Automates the process of extracting required columns from the DataFrame, calculating gm/id and vstar,
