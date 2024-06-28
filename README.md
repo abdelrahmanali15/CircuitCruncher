@@ -1,4 +1,4 @@
-# Project Title: Circuit Simulation Analysis Tools
+# CircuitCruncher: Circuit Simulation Analysis Tools
 
 ## Table of Contents
 - [Overview](#overview)
