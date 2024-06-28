@@ -4,13 +4,19 @@ import pandas as pd
 from prettytable import PrettyTable
 
 if __name__ == '__main__':
-    dfs = to_data_frames(ng_raw_read('ota-5t_tb2_ac.raw'))
     
-
+    AC_simNumber = 0 # assuming that it is the first analysis
+    (arrs, plots) = ng_raw_read('ota-5t_tb2_ac.raw')
+    
+    if plots[AC_simNumber][b'plotname'] != b'AC Analysis':
+        raise Exception("This Data Frame doesn't include AC Analysis")
+    
+    dfs = to_data_frames((arrs, plots))
     df = dfs[0]
+    
     # view_headers(df)
 
-    ac_analysis(df,save=True,html=True)
+    ac_analysis(df,save=True)
 
 
 
