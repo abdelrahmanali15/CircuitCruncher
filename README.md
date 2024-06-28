@@ -154,7 +154,69 @@ Include this file into `control block` in xschem or ngspice by `.include /path/t
 ---
 
 ### `file_readers.py`
-- `ng_raw_read(fname)`: Reads raw simulation data.
+#### `ng_raw_read`
+
+```python
+ng_raw_read(fname: str) -> tuple[list[np.ndarray], list[dict]]
+```
+
+Reads a binary file of Raw saved simulation data and returns a list of numpy arrays and a list of metadata dictionaries.
+metadata dictionaries contain the following keys
+```python
+ MDATA_LIST = [b'title', b'date', b'plotname', b'flags', b'no. variables',
+              b'no. points', b'dimensions', b'command', b'option']
+```
+you can use those keys after parsing Raw file to access them ot you can just use linux terminal command ` <more your_raw_file.raw>` in the simulation directory.
+
+- **Parameters:**
+  - `fname` (str): Path to the binary file.
+
+- **Returns:**
+  - tuple: List of `np.ndarray` and list of metadata dictionaries.
+
+#### `to_data_frames`
+
+```python
+to_data_frames(ngarr: tuple[list[np.ndarray], list[dict]]) -> list[pd.DataFrame]
+```
+
+Converts the output of `ng_raw_read` to a list of pandas DataFrames.
+
+- **Parameters:**
+  - `ngarr` (tuple): Tuple from `ng_raw_read`.
+
+- **Returns:**
+  - list: List of `pd.DataFrame`.
+
+
+#### `get_column_as_array`
+
+```python
+get_column_as_array(df: pd.DataFrame, column_name: str) -> np.ndarray
+```
+
+Extracts a column from a DataFrame as a numpy array. Each array represent the data of the input variable name as written in raw file.
+
+- **Parameters:**
+  - `df` (`pd.DataFrame`): DataFrame.
+  - `column_name` (str): Column name.
+
+- **Returns:**
+  - `np.ndarray`: Column as array.
+
+#### `view_headers`
+
+```python
+view_headers(df: pd.DataFrame)
+```
+
+Prints the column headers of a DataFrame to see the saved variable names.
+
+- **Parameters:**
+  - `df` (`pd.DataFrame`): DataFrame.
+
+---
+
 
 ## Contributing
 Contributions are welcome! Please submit a pull request or open an issue to discuss your ideas.
