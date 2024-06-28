@@ -54,7 +54,7 @@ def ng_raw_read(fname: str) -> 'tuple[list[np.ndarray], list[dict]]':
                 if b'flags' not in plot:
                     raise KeyError("Missing 'flags' in metadata before 'binary' key.")
 
-                dtype_formats = [np.complex_ if b'complex' in plot[b'flags'] else np.float_] * num_vars
+                dtype_formats = [np.complex128 if b'complex' in plot[b'flags'] else np.float_] * num_vars
                 row_dtype = np.dtype({'names': plot['varnames'], 'formats': dtype_formats})
                 arrs.append(np.fromfile(fp, dtype=row_dtype, count=num_points))
                 plots.append(plot.copy())
