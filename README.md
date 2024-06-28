@@ -55,6 +55,13 @@ if __name__ == '__main__':
     op_sim(df, html=True, additional_vars=['cgs', 'gmbs', 'vgs'], custom_expressions={"Avi": "gm*ro"})
 ```
 
+- Example Output
+  - `.txt` file
+![image](https://github.com/abdelrahmanali15/CircuitCruncher/assets/131778595/7f4485bf-9ec9-41aa-8b76-0370a4b4027b)
+  - `.html` file
+![image](https://github.com/abdelrahmanali15/CircuitCruncher/assets/131778595/3a9b90c1-4330-41cd-8ef1-9dfa2fcea9f6)
+   
+
 ### Saving SPICE Variables
 The script `save_spi.py` generates a SPICE save file for specified variables.
 > **Note:** For this script to work correctly you need to add the option `.options savecurrents` before your control block in xschem or ngspice spice file.
@@ -77,6 +84,9 @@ if __name__ == '__main__':
     saveVars = ['vgs', 'vds', 'vdsat', 'gm', 'gmbs', 'id', 'vth', 'gds', 'cgs']
     save_fet_vars(df.columns, saveVars, '/path/to/save_test_analog.spi')
 ```
+
+- Example Output _truncated_
+![code](https://github.com/abdelrahmanali15/CircuitCruncher/assets/131778595/1bf1bf5e-6781-4bbd-90ae-04a31f57d380)
 
 
 ## Library Functions
