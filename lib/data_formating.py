@@ -28,13 +28,13 @@ def format_value(val):
             return "NaN"
         abs_val = abs(val)
         if abs_val >= 1e12:
-            return f"{val/1e12:.2f}T"
+            return f"{val/1e-12:.2f}T"
         elif abs_val >= 1e9:
-            return f"{val/1e9:.2f}G"
+            return f"{val/1e-9:.2f}G"
         elif abs_val >= 1e6:
-            return f"{val/1e6:.2f}M"
+            return f"{val/1e-6:.2f}M"
         elif abs_val >= 1e3:
-            return f"{val/1e3:.2f}k"
+            return f"{val/1e-3:.2f}k"
         elif abs_val >= 1:
             return f"{val:.2f}"
         elif abs_val >= 1e-3:

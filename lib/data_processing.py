@@ -247,15 +247,31 @@ def op_sim(df, output_file='op_output', html=True, additional_vars=None, custom_
     data = {var: {num: get_column_as_array(df, parsed_columns[var].get(num, None)) for num in all_transistors} for var in variables}
 
     # Calculate derived parameters gm/id, v_star, ro if they are part of the variables
-    derived_variables = ['gm/id','v_star','ro']
+
+    derived_variables = ['gm/id', 'v_star', 'ro']
     derived_params = {}
+
     if 'gm' in variables and 'id' in variables:
-        derived_params['gm/id'] = {num: data['gm'][num] / data['id'][num] if not np.isnan(data['gm'][num]).all() and not np.isnan(data['id'][num]).all() else np.nan for num in all_transistors}
+        derived_params['gm/id'] = {
+            num: np.nan if np.isnan(data['gm'][num]).all() or np.isnan(data['id'][num]).all() or data['id'][num] == 0
+            else np.divide(data['gm'][num], data['id'][num], where=data['id'][num]!=0, out=np.full_like(data['gm'][num], np.nan))
+            for num in all_transistors
+        }
+
     if 'gm' in variables and 'id' in variables:
-        derived_params['v_star'] = {num: 2 * data['id'][num] / data['gm'][num] if not np.isnan(data['gm'][num]).all() and not np.isnan(data['id'][num]).all() else np.nan for num in all_transistors}
+        derived_params['v_star'] = {
+            num: np.nan if np.isnan(data['gm'][num]).all() or np.isnan(data['id'][num]).all() or data['gm'][num] == 0
+            else np.divide(2 * data['id'][num], data['gm'][num], where=data['gm'][num]!=0, out=np.full_like(data['id'][num], np.nan))
+            for num in all_transistors
+        }
+
     if 'gds' in variables:
-        derived_params['ro'] = {num: 1 / data['gds'][num] if not np.isnan(data['gds'][num]).all() else np.nan for num in all_transistors}
-    
+        derived_params['ro'] = {
+            num: np.nan if np.isnan(data['gds'][num]).all() or data['gds'][num] == 0
+            else np.divide(1, data['gds'][num], where=data['gds'][num]!=0, out=np.full_like(data['gds'][num], np.nan))
+            for num in all_transistors
+        }
+
     variables.sort()
     # Evaluate custom expressions
     custom_results = {}
