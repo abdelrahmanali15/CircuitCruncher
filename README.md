@@ -35,32 +35,6 @@ This repository contains Python scripts and modules to perform various analyses 
    ```
 
 ## Usage
-### Operating Point Analysis
-The script `op_analysis.py` extracts and displays the operating point parameters of transistors from a raw simulation file.
-
-```python
-# op_analysis.py
-
-from lib import ng_raw_read, to_data_frames, op_sim
-
-if __name__ == '__main__':
-    Op_simNumber = 0
-    (arrs, plots) = ng_raw_read('/path/to/simulation.raw')
-    
-    if plots[Op_simNumber][b'plotname'] != b'Operating Point':
-        raise Exception("This Data Frame doesn't include Operating Point Analysis")
-    
-    dfs = to_data_frames((arrs, plots))
-    df = dfs[0]
-    op_sim(df, html=True, additional_vars=['cgs', 'gmbs', 'vgs'], custom_expressions={"Avi": "gm*ro"})
-```
-
-- Example Output
-  - `.txt` file
-![image](https://github.com/abdelrahmanali15/CircuitCruncher/assets/131778595/7f4485bf-9ec9-41aa-8b76-0370a4b4027b)
-  - `.html` file
-![image](https://github.com/abdelrahmanali15/CircuitCruncher/assets/131778595/3a9b90c1-4330-41cd-8ef1-9dfa2fcea9f6)
-   
 
 ### Saving SPICE Variables
 The script `save_spi.py` generates a SPICE save file for specified variables.
@@ -87,6 +61,60 @@ if __name__ == '__main__':
 
 - Example Output _truncated_
 ![code](https://github.com/abdelrahmanali15/CircuitCruncher/assets/131778595/1bf1bf5e-6781-4bbd-90ae-04a31f57d380)
+
+
+User then should include his file in the `contrl block` of xschem or ngspice
+- Example
+```
+name=COMMANDS
+simulator=ngspice
+only_toplevel=false
+value="
+.param vdd=1.8
+.param vcm=0.9
+.options savecurrents
+
+.control
+
+    save all
+    .include path/to/save/file/save.spi
+
+    * operating point
+    optran 0 0 0 100n 10u 0
+    op
+
+    write ota-5t_tb.raw
+  
+.endc
+"
+```
+
+### Operating Point Analysis
+The script `op_analysis.py` extracts and displays the operating point parameters of transistors from a raw simulation file.
+
+```python
+# op_analysis.py
+
+from lib import ng_raw_read, to_data_frames, op_sim
+
+if __name__ == '__main__':
+    Op_simNumber = 0
+    (arrs, plots) = ng_raw_read('/path/to/simulation.raw')
+    
+    if plots[Op_simNumber][b'plotname'] != b'Operating Point':
+        raise Exception("This Data Frame doesn't include Operating Point Analysis")
+    
+    dfs = to_data_frames((arrs, plots))
+    df = dfs[0]
+    op_sim(df, html=True, additional_vars=['cgs', 'gmbs', 'vgs'], custom_expressions={"Avi": "gm*ro"})
+```
+
+- Example Output
+  - `.txt` file
+![image](https://github.com/abdelrahmanali15/CircuitCruncher/assets/131778595/7f4485bf-9ec9-41aa-8b76-0370a4b4027b)
+  - `.html` file
+![image](https://github.com/abdelrahmanali15/CircuitCruncher/assets/131778595/3a9b90c1-4330-41cd-8ef1-9dfa2fcea9f6)
+   
 
 
 ## Library Functions
