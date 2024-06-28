@@ -2,7 +2,59 @@ import numpy as np
 import pandas as pd
 import re
 from prettytable import PrettyTable 
+from .plot_manager import plot_bode
+from .file_readers import get_column_as_array
 
+def save_table_html(df_table, output_html):
+    with open(output_html+'.html', 'w') as file:
+        file.write(
+            df_table.style.set_table_styles([
+                {'selector': 'thead th', 'props': [('background-color', '#aec6cf'), ('color', 'black'), ('text-align', 'center')]},
+                {'selector': 'tbody td', 'props': [('text-align', 'center'), ('padding', '10px'), ('border', '2px solid #ddd')]},
+                {'selector': 'tbody tr:nth-child(even)', 'props': [('background-color', '#f9f9f9')]},
+                {'selector': 'tbody tr:hover', 'props': [('background-color', '#ffcccc')]}
+            ]).set_caption(output_html)
+            .set_table_attributes('class="dataframe minimalist-table"')
+            .hide(axis='index')
+            .to_html()
+        )
+    print(f"Table saved as {output_html}")
+
+    # Save table as TXT
+def save_table_txt(table, output_txt):
+    with open(output_txt+'.txt', 'w') as file:
+        file.write(str(table))
+    print(f"Table saved as {output_txt}")
+
+
+
+def format_value(val):
+        if np.isnan(val):
+            return "NaN"
+        abs_val = abs(val)
+        if abs_val >= 1e12:
+            return f"{val/1e12:.2f}T"
+        elif abs_val >= 1e9:
+            return f"{val/1e9:.2f}G"
+        elif abs_val >= 1e6:
+            return f"{val/1e6:.2f}M"
+        elif abs_val >= 1e3:
+            return f"{val/1e3:.2f}k"
+        elif abs_val >= 1:
+            return f"{val:.2f}"
+        elif abs_val >= 1e-3:
+            return f"{val*1e3:.2f}m"
+        elif abs_val >= 1e-6:
+            return f"{val*1e6:.2f}μ"
+        elif abs_val >= 1e-9:
+            return f"{val*1e9:.2f}n"
+        elif abs_val >= 1e-12:
+            return f"{val*1e12:.2f}p"
+        elif abs_val >= 1e-15:
+            return f"{val*1e15:.2f}f"
+        else:
+            return f"{val*1e18:.2f}a"
+        
 
 def lookup(lookup_array: np.ndarray, lookup_value: float, lookup_return_array: np.ndarray):
         """
@@ -36,11 +88,13 @@ def measure_ac_parameters(frequencies, vout):
     vout_mag = np.abs(vout)
     vout_db = 20 * np.log10(vout_mag)
     vout_phase_margin = np.angle(vout, deg=True) + 180
+    phase = np.angle(vout, deg=False)
+    # phase=np.angle(analysis.out, deg=False)
 
     # Find the index closest to 1 kHz
-    idx_1kHz = np.argmin(np.abs(frequencies - 10))
-    A0 = vout_mag[idx_1kHz]
-    A0_db = vout_db[idx_1kHz]
+    idx_10Hz = np.argmin(np.abs(frequencies - 10))
+    A0 = vout_mag[idx_10Hz]
+    A0_db = vout_db[idx_10Hz]
 
     # Unity gain frequency
     ugf = np.interp(1, vout_mag[::-1], frequencies[::-1])
@@ -57,7 +111,7 @@ def measure_ac_parameters(frequencies, vout):
         BW_3dB = None
 
     # Calculate Gain-Bandwidth Product (GBW)
-    GBW = A0 * ugf
+    GBW = A0 * BW_3dB
 
 
     return {
@@ -69,7 +123,8 @@ def measure_ac_parameters(frequencies, vout):
         "UGF": ugf,
         "PM": PM,
         "BW_3dB": abs(BW_3dB),
-        "GBW": (GBW)
+        "GBW": (GBW),
+        "phase":phase
     }
 
 
@@ -100,9 +155,68 @@ print("BW_3dB:", BW_3dB)
 print("GBW:", GBW)
 '''
 
+def ac_analysis(df, save=False, output_file="ac_output", html=False):
+        freq = np.abs(get_column_as_array(df, 'frequency'))
+        vout_mag = get_column_as_array(df, 'v(vout)')
+        ac_parameters = measure_ac_parameters(freq, vout_mag)
 
+        vout_mag = ac_parameters.get("vout_mag", np.nan)
+        vout_db = ac_parameters.get("vout_db", np.nan)
+        A0 = ac_parameters.get("A0", np.nan)
+        A0_db = ac_parameters.get("A0_db", np.nan)
+        UGF = ac_parameters.get("UGF", np.nan)
+        PM = ac_parameters.get("PM", np.nan)
+        BW_3dB = ac_parameters.get("BW_3dB", np.nan)
+        GBW = ac_parameters.get("GBW", np.nan)
+        phase_rad = ac_parameters.get("phase", np.nan)
+        
+        # Create the table
+        table = PrettyTable()
+        table.field_names = ['A0', 'A0_db', 'BW', 'UGF', 'GBW', 'PM']
+        table.add_row([
+            format_value(A0),
+            format_value(A0_db),
+            format_value(BW_3dB),
+            format_value(abs(UGF)),
+            format_value(abs(GBW)),
+            format_value(abs(PM))
+        ])
 
-def op_sim(df, output_file='output.txt', html=True, additional_vars=None, custom_expressions=None):
+        # Convert the table to a string
+        table_str = table.get_string()
+
+        # Create the title with padding for centering
+        title = "Summary of AC Analysis"
+        table_width = len(table_str.splitlines()[0])
+        title_str = title.center(table_width)
+
+        # Print the title and the table
+        print()
+        print(title_str)
+        print(table_str)
+        print()
+        # Save the table if save is True
+        table_str = title_str + '\n'+ table_str
+        if save:
+            # Convert PrettyTable to DataFrame for HTML saving
+            table_data = {
+                'A0': [format_value(A0)],
+                'A0_db': [format_value(A0_db)],
+                'BW': [format_value(BW_3dB)],
+                'UGF': [format_value(abs(UGF))],
+                'GBW': [format_value(abs(GBW))],
+                'PM': [format_value(abs(PM))]
+            }
+            df_table = pd.DataFrame(table_data)
+            
+            if html:
+                save_table_html(df_table, output_file)
+            else:
+                save_table_txt(table_str, output_file)
+    
+        plot_bode(freq, vout_db, phase_rad, BW_3dB)
+
+def op_sim(df, output_file='op_output', html=True, additional_vars=None, custom_expressions=None):
     """
     Automates the process of extracting required columns from the DataFrame, calculating gm/id and vstar,
     and displaying the results in a formatted table using PrettyTable.
@@ -161,33 +275,7 @@ def op_sim(df, output_file='output.txt', html=True, additional_vars=None, custom
     def get_column_as_array(df, col_name):
         return df[col_name].values if col_name in df else np.nan
 
-    # Helper function to format values with appropriate units
-    def format_value(val):
-        if np.isnan(val):
-            return "NaN"
-        abs_val = abs(val)
-        if abs_val >= 1e12:
-            return f"{val/1e12:.2f}T"
-        elif abs_val >= 1e9:
-            return f"{val/1e9:.2f}G"
-        elif abs_val >= 1e6:
-            return f"{val/1e6:.2f}M"
-        elif abs_val >= 1e3:
-            return f"{val/1e3:.2f}k"
-        elif abs_val >= 1:
-            return f"{val:.2f}"
-        elif abs_val >= 1e-3:
-            return f"{val*1e3:.2f}m"
-        elif abs_val >= 1e-6:
-            return f"{val*1e6:.2f}μ"
-        elif abs_val >= 1e-9:
-            return f"{val*1e9:.2f}n"
-        elif abs_val >= 1e-12:
-            return f"{val*1e12:.2f}p"
-        elif abs_val >= 1e-15:
-            return f"{val*1e15:.2f}f"
-        else:
-            return f"{val*1e18:.2f}a"
+    
 
     # Get all transistor numbers
     all_transistors = sorted(set(num for var_dict in parsed_columns.values() for num in var_dict.keys()))
@@ -255,31 +343,10 @@ def op_sim(df, output_file='output.txt', html=True, additional_vars=None, custom
 
     df_table = pd.DataFrame(table_data)
 
-    def save_table_html(df_table, output_html):
-        with open(output_html, 'w') as file:
-            file.write(
-                df_table.style.set_table_styles([
-                    {'selector': 'thead th', 'props': [('background-color', '#aec6cf'), ('color', 'black'), ('text-align', 'center')]},
-                    {'selector': 'tbody td', 'props': [('text-align', 'center'), ('padding', '10px'), ('border', '2px solid #ddd')]},
-                    {'selector': 'tbody tr:nth-child(even)', 'props': [('background-color', '#f9f9f9')]},
-                    {'selector': 'tbody tr:hover', 'props': [('background-color', '#ffcccc')]}
-                ]).set_caption("Transistor Parameters")
-                .set_table_attributes('class="dataframe minimalist-table"')
-                .hide(axis='index')
-                .to_html()
-            )
-        print(f"Table saved as {output_html}")
-
-    # Save table as TXT
-    def save_table_txt(table, output_txt):
-        with open(output_txt, 'w') as file:
-            file.write(str(table))
-        print(f"Table saved as {output_txt}")
-
     save_table_txt(table, output_file)
 
     if html:
-        save_table_html(df_table, 'output.html')
+        save_table_html(df_table, 'op_output')
 
 
 
