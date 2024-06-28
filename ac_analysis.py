@@ -2,6 +2,7 @@ from lib import ng_raw_read, to_data_frames, get_column_as_array, lookup, view_h
 import numpy as np
 import pandas as pd
 from prettytable import PrettyTable
+import matplotlib.pyplot as plt
 
 if __name__ == '__main__':
     
@@ -16,15 +17,11 @@ if __name__ == '__main__':
     
     # view_headers(df)
 
-    ac_analysis(df,save=True)
+    ac_parameters = ac_analysis(df,save=True)
 
-
+    plt.show()
 
     '''example Usage to get data for more post processing 
-    # Call the function with data
-        freq = get_column_as_array(df,'frequency')
-    vout_mag = get_column_as_array(df,'v(vout)')
-    ac_parameters = measure_ac_parameters(frequencies, vout)
 
     # Accessing the returned data
     vout_mag = ac_parameters["vout_mag"]

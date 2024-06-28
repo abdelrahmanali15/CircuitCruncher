@@ -6,3 +6,5 @@
 lib/__pycache__/__init__.cpython-38.pyc
 lib/__pycache__/data_processing.cpython-38.pyc
 lib/__pycache__/plot_manager.cpython-38.pyc
+Bode_Plot
+AC_Analysis:Bode_Plot

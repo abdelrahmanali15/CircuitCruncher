@@ -2,58 +2,11 @@ import numpy as np
 import pandas as pd
 import re
 from prettytable import PrettyTable 
-from .plot_manager import plot_bode
+from .plot_manager import PlotManager
 from .file_readers import get_column_as_array
-
-def save_table_html(df_table, output_html):
-    with open(output_html+'.html', 'w') as file:
-        file.write(
-            df_table.style.set_table_styles([
-                {'selector': 'thead th', 'props': [('background-color', '#aec6cf'), ('color', 'black'), ('text-align', 'center')]},
-                {'selector': 'tbody td', 'props': [('text-align', 'center'), ('padding', '10px'), ('border', '2px solid #ddd')]},
-                {'selector': 'tbody tr:nth-child(even)', 'props': [('background-color', '#f9f9f9')]},
-                {'selector': 'tbody tr:hover', 'props': [('background-color', '#ffcccc')]}
-            ]).set_caption(output_html)
-            .set_table_attributes('class="dataframe minimalist-table"')
-            .hide(axis='index')
-            .to_html()
-        )
-    print(f"Table saved as {output_html}")
-
-    # Save table as TXT
-def save_table_txt(table, output_txt):
-    with open(output_txt+'.txt', 'w') as file:
-        file.write(str(table))
-    print(f"Table saved as {output_txt}")
+from .data_formating import save_table_html,save_table_txt,format_value
 
 
-
-def format_value(val):
-        if np.isnan(val):
-            return "NaN"
-        abs_val = abs(val)
-        if abs_val >= 1e12:
-            return f"{val/1e12:.2f}T"
-        elif abs_val >= 1e9:
-            return f"{val/1e9:.2f}G"
-        elif abs_val >= 1e6:
-            return f"{val/1e6:.2f}M"
-        elif abs_val >= 1e3:
-            return f"{val/1e3:.2f}k"
-        elif abs_val >= 1:
-            return f"{val:.2f}"
-        elif abs_val >= 1e-3:
-            return f"{val*1e3:.2f}m"
-        elif abs_val >= 1e-6:
-            return f"{val*1e6:.2f}μ"
-        elif abs_val >= 1e-9:
-            return f"{val*1e9:.2f}n"
-        elif abs_val >= 1e-12:
-            return f"{val*1e12:.2f}p"
-        elif abs_val >= 1e-15:
-            return f"{val*1e15:.2f}f"
-        else:
-            return f"{val*1e18:.2f}a"
         
 
 def lookup(lookup_array: np.ndarray, lookup_value: float, lookup_return_array: np.ndarray):
@@ -213,8 +166,18 @@ def ac_analysis(df, save=False, output_file="ac_output", html=False):
                 save_table_html(df_table, output_file)
             else:
                 save_table_txt(table_str, output_file)
-    
-        plot_bode(freq, vout_db, phase_rad, BW_3dB)
+
+
+        pm = PlotManager(num_subplots=2, title="Bode Plot Example", xlabel="Frequency (Hz)", ylabels=["Gain (dB)", "Phase (rads)"], x_scale='log', y_scale='linear')
+        pm.bode_plot(frequency=freq, gain=vout_db, phase=phase_rad, bw_3dB=BW_3dB)
+        if save:
+            pm.save('AC_Analysis:Bode_Plot')
+        pm.show()
+        
+        
+
+        return ac_parameters
+        
 
 def op_sim(df, output_file='op_output', html=True, additional_vars=None, custom_expressions=None):
     """
