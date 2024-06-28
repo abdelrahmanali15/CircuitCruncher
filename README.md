@@ -83,10 +83,75 @@ if __name__ == '__main__':
 The `lib` folder contains utility functions for data processing and analysis.
 
 ### `data_processing.py`
-- `lookup(lookup_array, lookup_value, lookup_return_array)`: Linear interpolation function.
-- `op_sim(df, output_file='output.txt', html=True, additional_vars=None, custom_expressions=None)`: Extracts and displays operating point parameters.
-- `get_fet(columns)`: Extracts transistor names from columns.
-- `save_fet_vars(columns, variables, filename='save.spi')`: Generates a SPICE save file.
+
+#### `lookup`
+
+```python
+lookup(lookup_array: np.ndarray, lookup_value: float, lookup_return_array: np.ndarray) -> float
+```
+
+Performs linear interpolation to find the corresponding value in `lookup_return_array` for a given `lookup_value`.
+
+- **Parameters:**
+  - `lookup_array` (np.ndarray): Array of x-values.
+  - `lookup_value` (float): The x-value to look up.
+  - `lookup_return_array` (np.ndarray): Array of y-values.
+
+- **Returns:**
+  - `float`: Interpolated y-value.
+
+#### `op_sim`
+
+```python
+op_sim(df: pd.DataFrame, output_file='output.txt', html=True, additional_vars=None, custom_expressions=None)
+```
+
+Extracts headers from the DataFrame, calculates `gm/id`, `vstar` and `ro`, and displays results in a formatted table in the terminal and `.txt` file it has the ability to save `.html` file.
+It has the ability to calculate simple custom expressions made of saved variables.
+It also has the ability to input a list of variables not included in default printed variables which are 
+```python
+default_variables = ['vds', 'vdsat', 'gm', 'id', 'vth', 'gds', 'gm/id', 'vstar', 'ro']
+```
+
+- **Parameters:**
+  - `df` (pd.DataFrame): DataFrame with columns to process.
+  - `output_file` (str): Name of the output file.
+  - `html` (bool): Save table as HTML if True.
+  - `additional_vars` (list): Additional variables to include.
+  - `custom_expressions` (dict): Custom expressions to evaluate.
+
+#### `get_fet`
+
+```python
+get_fet(columns: list) -> list
+```
+
+Extracts transistor names with hierarchy from list of variable names (headers of Data frame).
+
+- **Parameters:**
+  - `columns` (list): List of column names.
+
+- **Returns:**
+  - `list`: List of transistor names.
+
+#### `save_fet_vars`
+
+```python
+save_fet_vars(columns: list, variables: list, filename='save.spi')
+```
+
+Generates a SPICE save file contains command to save all user specified variables of transistors.
+Include this file into `control block` in xschem or ngspice by `.include /path/to/file/save.spi`
+
+- **Parameters:**
+  - `columns` (list): List of column names.
+  - `variables` (list): List of variables to save.
+  - `filename` (str): Name of the file to save.
+
+- **Returns:**
+  - `None`
+
+---
 
 ### `file_readers.py`
 - `ng_raw_read(fname)`: Reads raw simulation data.
