@@ -4,9 +4,9 @@ from prettytable import PrettyTable
 if __name__ == '__main__':
     
     Op_simNumber = 0
-    (arrs, plots) = ng_raw_read('/home/tare/XschemForSky/Projects/ota-5t/xschem/sim2/test_analog.raw')
+    (arrs, plots) = ng_raw_read('')
     
-    
+    print(arrs)
     print(plots[Op_simNumber][b'plotname']) # Print Simulation type to make sure it's what we want
     if plots[Op_simNumber][b'plotname'] != b'Operating Point':
         raise(f"This Data Frame doesn't include Operating Point Analysis")
@@ -19,4 +19,4 @@ if __name__ == '__main__':
     # view_headers(df) # Print variables in dataframe to make sure that it's the one we need
 
 
-    op_sim(df,html=True,additional_vars=['cgs','gmbs','vgs'],custom_expressions={"Avi":"gm*ro"}) # Extract Transistors OP Data
+    op_sim(df,html=True,additional_vars=['cgs','gmbs','vgs'],custom_expressions={"Avi":"gm/gds"}) # Extract Transistors OP Data
