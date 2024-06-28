@@ -58,7 +58,7 @@ if __name__ == '__main__':
 
 ### Saving SPICE Variables
 The script `save_spi.py` generates a SPICE save file for specified variables.
-
+For this script to work correctly you need to add the option `.options savecurrents` before your control block in xschem or ngpice spice file.
 ```python
 # save_spi.py
 
