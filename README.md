@@ -7,7 +7,6 @@
 - [Usage](#usage)
   - [Operating Point Analysis](#operating-point-analysis)
   - [Saving SPICE Variables](#saving-spice-variables)
-  - [AC Analysis](#ac-analysis)
 - [Library Functions](#library-functions)
 - [Contributing](#contributing)
 - [License](#license)
@@ -58,7 +57,8 @@ if __name__ == '__main__':
 
 ### Saving SPICE Variables
 The script `save_spi.py` generates a SPICE save file for specified variables.
-For this script to work correctly you need to add the option `.options savecurrents` before your control block in xschem or ngpice spice file.
+> **Note:** For this script to work correctly you need to add the option `.options savecurrents` before your control block in xschem or ngspice spice file.
+
 ```python
 # save_spi.py
 
