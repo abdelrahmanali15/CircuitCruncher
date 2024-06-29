@@ -224,26 +224,20 @@ The script `ac_analysis.py` performs AC analysis and calculates parameters like 
 from lib import ng_raw_read, to_data_frames, get_column_as_array, measure_ac_parameters, PlotManager
 
 if __name__ == '__main__':
-    dfs = to_data_frames(ng_raw_read('/path/to/ac_analysis.raw'))
+    AC_simNumber = 0 # assuming that it is the first analysis if you run it after op in the same simulation the change 0 to 1
+    (arrs, plots) = ng_raw_read(ac_raw_path)
+
+    if plots[AC_simNumber][b'plotname'] != b'AC Analysis':
+        raise Exception("This Data Frame doesn't include AC Analysis")
+
+    dfs = to_data_frames((arrs, plots))
     df = dfs[0]
-    
-    freq = get_column_as_array(df, 'frequency')
-    vout_mag = get_column_as_array(df, 'v(vout)')
-    ac_parameters = measure_ac_parameters(freq, vout_mag)
 
-    vout_db = ac_parameters["vout_db"]
-    vout_phase_margin = ac_parameters["vout_phase_margin"]
-    A0_db = ac_parameters["A0_db"]
-    BW_3dB = ac_parameters["BW_3dB"]
-    
-    print(f'BW = {BW_3dB:.2e}')
-    print(f'A0_db = {A0_db:.2f}')
+    # view_headers(df)
 
-    pm = PlotManager(num_subplots=2, title='AC Analysis', xlabel='Frequency', ylabel='')
-    pm.plot(freq, vout_db, label='Gain dB', subplot_index=0)
-    pm.plot(freq, vout_phase_margin, label='Phase', subplot_index=1)
-    pm.add_line(line_orientation='vertical', line_value=BW_3dB, line_label='BW 3dB', line_color='red')
-    pm.show()
+    ac_parameters = ac_analysis(df,save=True,output_file=output_dir+'ac_out')
+
+    plt.show()
 ```
 
 ## Library Functions
