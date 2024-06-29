@@ -4,10 +4,12 @@
 - [Overview](#overview)
 - [Requirements](#requirements)
 - [Installation](#installation)
+  - [Using Conda (Recommended)](#using-conda)
+  - [Normal Install (Easy)](#normal-install-easy)
 - [Usage](#usage)
   - [Operating Point Analysis](#operating-point-analysis)
   - [Saving SPICE Variables](#saving-spice-variables)
-  - [AC Analysis](#ac-analysis)
+  - [AC Analysis Data Extraction](#ac-analysis-data-extractions)
 - [Library Functions](#library-functions)
 - [Contributing](#contributing)
 - [License](#license)
@@ -26,10 +28,10 @@ This repository contains Python scripts and modules to perform various analyses 
 - PrettyTable
 
 ## Installation
-
+### Using Conda
 <div class="alert alert-block alert-info">
 <b>Tip:</b>
-Conda envireoment is not a must, you can create any envireoment that have all needed packages.
+Conda envireoment is not a must, it just makes your life easier when you have too many projects depending on different versions of libraries.
 </div>
 
  ### Make sure you have conda installed on your system by using this command 
@@ -119,20 +121,22 @@ You should see the conda version number, indicating that the installation was su
 
 By following these steps, you should have Miniconda installed and running on your Linux system, providing you with a robust environment management tool for your projects.
 
+#### Step 6: Clone the repository
 
-1. Clone the repository:
    ```bash
    git clone https://github.com/abdelrahmanali15/CircuitCruncher/tree/try_notebook
-   cd cd CircuitCruncher
+   cd CircuitCruncher
    ```
-   
+#### Step 7: Create conda enviroment from .yaml file 
 2. Create conda enviroment from .yaml file 
    ```bash
    conda env create --file environment.yml
    ```
-3. Install jupyter notebook extension on vscode
-4. Open the notebook to view
+#### Step 8: Install jupyter notebook extension on vscode
+#### Step 9: Open the notebook to view
 
+
+### Normal Install (Easy)
 
 ## Usage
 
