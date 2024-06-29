@@ -13,13 +13,13 @@ def save_table_html(df_table, output_html):
             .hide(axis='index')
             .to_html()
         )
-    print(f"Table saved as {output_html}")
+    print(f"Table saved as {output_html}.html")
 
     # Save table as TXT
 def save_table_txt(table, output_txt):
     with open(output_txt+'.txt', 'w') as file:
         file.write(str(table))
-    print(f"Table saved as {output_txt}")
+    print(f"Table saved as {output_txt}.txt")
 
 
 
@@ -28,13 +28,13 @@ def format_value(val):
             return "NaN"
         abs_val = abs(val)
         if abs_val >= 1e12:
-            return f"{val/1e-12:.2f}T"
+            return f"{val/1e12:.2f}T"
         elif abs_val >= 1e9:
-            return f"{val/1e-9:.2f}G"
+            return f"{val/1e9:.2f}G"
         elif abs_val >= 1e6:
-            return f"{val/1e-6:.2f}M"
+            return f"{val/1e6:.2f}M"
         elif abs_val >= 1e3:
-            return f"{val/1e-3:.2f}k"
+            return f"{val/1e3:.2f}k"
         elif abs_val >= 1:
             return f"{val:.2f}"
         elif abs_val >= 1e-3:

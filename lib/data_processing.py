@@ -325,7 +325,7 @@ def op_sim(df, output_file='op_output', html=True, additional_vars=None, custom_
     save_table_txt(table, output_file)
 
     if html:
-        save_table_html(df_table, 'op_output')
+        save_table_html(df_table, output_file)
 
 
 
