@@ -9,3 +9,5 @@ lib/__pycache__/plot_manager.cpython-38.pyc
 Bode_Plot
 AC_Analysis:Bode_Plot
 test.py
+test2.py
+config.yaml

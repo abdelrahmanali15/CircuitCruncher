@@ -5,6 +5,7 @@ from prettytable import PrettyTable
 from .plot_manager import PlotManager
 from .file_readers import get_column_as_array
 from .data_formating import save_table_html,save_table_txt,format_value
+import os
 
 
         
@@ -344,10 +345,10 @@ def get_fet(columns):
     return list(transistors)
 
 
-def save_fet_vars(columns, variables, filename='save.spi'):
+def save_fet_vars(columns, variables, savefilename):
     try:
         transistors = get_fet(columns)
-        with open(filename, 'w') as f:
+        with open(savefilename, 'w') as f:
             for transistor in transistors:
                 for var in variables:
                     try:
@@ -356,10 +357,10 @@ def save_fet_vars(columns, variables, filename='save.spi'):
                         elif var.startswith('i'):
                             f.write(f"save i({transistor}[{var}])\n")
                         else:
-                            f.write(f"save   {transistor}[{var}]\n")
+                            f.write(f"save {transistor}[{var}]\n")
                     except Exception as e:
                         print(f"Error writing variable {var} for transistor {transistor}: {e}")
                 f.write("\n")
-        print("Output file created successfully")
+        print(f"Save file created successfully in {savefilename}")
     except Exception as e:
         print(f"Error during save_fet_vars execution: {e}")
