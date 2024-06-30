@@ -22,12 +22,11 @@ class SpiceSimulator:
         except OSError as e:
             self.comment(f"Error: {filename} : {e.strerror}")
 
-    def includeSaveSpice(self,savedir,input_file = 'save.spi'):
+    def includeSaveSpice(self, savedir, input_file='save.spi'):
         spice_file = os.path.join(self.simdir, self.name + ".spice")
         with open(spice_file, 'r') as file:
             lines = file.readlines()
-    
-        
+
         control_start = None
         save_all_line = None
         control_end = None
@@ -41,24 +40,32 @@ class SpiceSimulator:
             elif stripped_line == '.endc':
                 control_end = i
                 break
-        
+
         if control_start is None or control_end is None:
             raise ValueError("The netlist file does not contain a proper .control/.endc block.")
-        
+
+        # Delete all .include statements within the .control block first for multiple runs 
+        i = control_start + 1
+        while i < control_end:
+            if lines[i].strip().startswith('.include'):
+                del lines[i]
+                control_end -= 1
+            else:
+                i += 1
+
         if save_all_line is not None:
             insert_position = save_all_line + 1
         else:
             insert_position = control_start + 1
-        
 
         include_path = os.path.join(savedir, input_file)
         include_command = f"    .include {include_path}\n"
 
         lines.insert(insert_position, include_command)
-        
-        
+
         with open(spice_file, 'w') as file:
             file.writelines(lines)
+
 
     def ngspice(self, ignore=True):
         simOk = True

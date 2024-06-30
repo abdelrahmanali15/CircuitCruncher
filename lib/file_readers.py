@@ -107,3 +107,23 @@ def loadConfig():
             "op_RawPath":op_raw_path,
             "ac_RawPath" : ac_raw_path,
             "out_dir": output_dir  }  
+
+
+def simType(name,plots): 
+    def simAlias():
+        if name == 'ac':
+            return b'AC Analysis'
+        elif name == 'op':
+            return b'Operating Point'
+        elif name == 'dc':
+            pass
+        else:
+            raise NotImplementedError(f"Unsupported plot name {name}")
+
+    idx = 0
+    for plot in plots:
+        idx = idx + 1 
+        if plot[b'plotname'] == simAlias():
+            return idx - 1
+        else:
+            raise NotImplementedError(f"Unsupported plot name {name}")
