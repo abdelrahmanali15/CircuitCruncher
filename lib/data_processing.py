@@ -330,6 +330,40 @@ def op_sim(df, output_file='op_output', html=True, additional_vars=None, custom_
 
 
 
+def strip_column_number_suffix(df):
+    df.columns = [re.sub(r'\d+$', '', col) for col in df.columns]
+    return df
+
+def concatenate_op_dataframes(dfs, column_name):
+    for i in range(len(dfs)):
+        dfs[i] = strip_column_number_suffix(dfs[i])
+    
+    # Concatenate the DataFrames along the rows
+    df_joined = pd.concat(dfs, axis=0, ignore_index=True)
+    return df_joined[column_name]
+
+''' 
+Example conttrol block to use with this 
+sweep l and save data, the function gets the data saved at each iteration and form a vector for it
+it doesnt return l so you should add l vector in python code ex. l_values = np.arange(lcurrent, lstop , lstep)
+.control 
+ 
+.include /home/tare/XschemForSky/labs/lab2/mos-charc/sim/save.spi
+
+let lcurrent = 0.15
+let lstop = 10
+let  lstep = 0.02
+
+ while lcurrent le lstop
+	alterparam l = $&lcurrent
+	reset
+	save all
+	op
+	let lcurrent = lcurrent + lstep
+	write test_ota_tb.raw
+	set appendwrite
+end
+ '''
 
 def get_fet(columns):
     # Pattern to extract the transistor name with hierarchy

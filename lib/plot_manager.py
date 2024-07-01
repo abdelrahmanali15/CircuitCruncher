@@ -8,15 +8,12 @@ class PlotManager:
         self.num_subplots = num_subplots
         self.fig, self.axs = plt.subplots(num_subplots, 1, sharex=True)
         self.fig.suptitle(title)
-
-        # Extract scale settings from kwargs or use defaults
         self.x_scale = kwargs.get('x_scale', 'linear')
         self.y_scale = kwargs.get('y_scale', 'linear')
 
         if num_subplots == 1:
-            self.axs = [self.axs]  # Ensure self.axs is always a list
+            self.axs = [self.axs]
 
-        # Use the provided y-labels or default to 'Y Axis'
         if ylabels is None:
             ylabels = ['Y Axis'] * num_subplots
         elif len(ylabels) != num_subplots:
@@ -31,8 +28,8 @@ class PlotManager:
         
         self.plots = [[] for _ in range(num_subplots)]
 
-
-    def format_value(self,val):
+    @staticmethod
+    def format_value(val):
         if np.isnan(val):
             return "NaN"
         abs_val = abs(val)
@@ -58,8 +55,7 @@ class PlotManager:
             return f"{val*1e15:.2f}f"
         else:
             return f"{val*1e18:.2f}a"
-        
-        
+
     def plot(self, xaxis: np.ndarray, yaxis: np.ndarray, label: str, subplot_index: int = 0, linestyle: str = '-'):
         if 0 <= subplot_index < self.num_subplots:
             self.axs[subplot_index].plot(xaxis, yaxis, label=label, linestyle=linestyle)
@@ -73,9 +69,9 @@ class PlotManager:
             ax = self.axs[subplot_index]
             if line_value is not None:
                 if line_orientation == 'horizontal':
-                    ax.axhline(y=line_value, color=line_color, linestyle='--', label=f'{self.format_value(line_label)}={self.format_value(abs(line_value))}')
+                    ax.axhline(y=line_value, color=line_color, linestyle='--', label=f'{line_label}={self.format_value(line_value)}')
                 elif line_orientation == 'vertical':
-                    ax.axvline(x=line_value, color=line_color, linestyle='--', label=f'{self.format_value(line_label)}={self.format_value(abs(line_value))}')
+                    ax.axvline(x=line_value, color=line_color, linestyle='--', label=f'{line_label}={self.format_value(line_value)}')
                 ax.legend()
         else:
             raise IndexError("subplot_index out of range")
@@ -113,7 +109,7 @@ class PlotManager:
 
     def show(self):
         plt.show(block=False)
-    
+
     def save(self, filename: str, format: str = 'png', width: int = 8, height: int = 8):
         self.fig.set_size_inches(width, height)
         self.fig.savefig(filename, format=format, bbox_inches='tight')
@@ -157,8 +153,6 @@ class PlotManager:
             ax.axvline(x=bw_3dB, color='red')
             ax.annotate(f'{self.format_value(bw_3dB)}Hz', xy=(bw_3dB, 0), xytext=(5, 10),
                         textcoords='offset points', arrowprops=dict(arrowstyle='->', color='red'))
-        
-
 
 # Example usage:
 # freq = np.logspace(1, 4, num=400)
