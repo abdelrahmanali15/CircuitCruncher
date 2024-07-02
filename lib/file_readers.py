@@ -116,7 +116,7 @@ def simType(name,plots):
         elif name == 'op':
             return b'Operating Point'
         elif name == 'dc':
-            pass
+            return b'DC transfer characteristic'
         else:
             raise NotImplementedError(f"Unsupported plot name {name}")
 
