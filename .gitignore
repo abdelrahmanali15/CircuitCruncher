@@ -8,3 +8,5 @@ lib/__pycache__/plot_manager.cpython-38.pyc
 Bode_Plot
 AC_Analysis:Bode_Plot
 config.yaml
+Loop_STB_Analysis
+stb_output.txt
