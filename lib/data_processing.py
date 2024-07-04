@@ -2,9 +2,9 @@ import numpy as np
 import pandas as pd
 import re
 from prettytable import PrettyTable 
-from .plot_manager import PlotManager
-from .file_readers import get_column_as_array
-from .data_formating import save_table_html,save_table_txt,format_value
+from plot_manager import PlotManager
+from file_readers import get_column_as_array
+from data_formating import save_table_html,save_table_txt,format_value
 import os
 
 
@@ -178,7 +178,104 @@ def ac_analysis(df, save=False, output_file="ac_output", html=False):
         
 
         return ac_parameters
+
+def stb_analysis(df, save=False, output_file="stb_output", html=False,tian_signal='tian_signal'):
+    def find_gain_crossover(freqs, lg_mag, lg_phase):
+        crossover_index = np.where(np.diff(np.sign(lg_mag)))[0]
+        gain_crossover_freq = freqs[crossover_index]
+        phase_at_zero_gain = lg_phase[crossover_index]
+        return gain_crossover_freq, phase_at_zero_gain
+
+    def calculate_phase_margin(phase_at_zero_gain):
+        phase_at_zero_gain_degrees = np.degrees(phase_at_zero_gain)
+        PM = np.abs(180 - phase_at_zero_gain_degrees)
+        return PM
+
+    def convert_db_to_magnitude(A0_db):
+        magnitude = 10 ** (A0_db / 20)
+        return magnitude
+
+    def calculate_gbw(A0_db, BW_3dB):
+        A0 = convert_db_to_magnitude(A0_db)
+        GBW = A0 * BW_3dB
+        return GBW
+
+
+    freq = np.abs(get_column_as_array(df, 'frequency'))
+    tian = get_column_as_array(df, tian_signal)
+    loop_gain_mag = np.abs(tian)
+    loop_gain_db = 20 * np.log10(loop_gain_mag)
+    phase = np.angle(tian, deg=False)
+
+    # fgx = get_column_as_array(df, 'gain_crossover_freq')
+
+
+    idx_10Hz = np.argmin(np.abs(freq - 10))
+    A0_db = loop_gain_db[idx_10Hz]
+
+    # Calculate the 3 dB bandwidth
+    BW_3dB_freqs = freq[loop_gain_db >= (A0_db - 3)]
+    if len(BW_3dB_freqs) > 0:
+        BW_3dB = BW_3dB_freqs[-1] - BW_3dB_freqs[0]
+    else:
+        BW_3dB = None
+
+    # Calculate Gain-Bandwidth Product (GBW)
+    GBW = calculate_gbw(A0_db,BW_3dB)
+
+    fgx,phasegx = find_gain_crossover(freq,loop_gain_db,phase)
+    phase_margin = calculate_phase_margin(phasegx)
+    pm = PlotManager(num_subplots=2, title="Bode Plot Example", xlabel="Frequency (Hz)", ylabels=["Gain (dB)", "Phase (rads)"], x_scale='log', y_scale='linear')
+    pm.bode_plot(frequency=freq, gain=loop_gain_db, phase=phase, bw_3dB=fgx[0],title='Loop Stability')
+    if save:
+        pm.save('Loop_STB_Analysis')
+    pm.show()
+
+
+
+    # Create the table
+    table = PrettyTable()
+    table.field_names = ['A0 dB', 'BW', 'GBW', 'PM']
+    table.add_row([
+        format_value(A0_db),
+        format_value(BW_3dB),
+        format_value(abs(GBW)),
+        format_value(abs(phase_margin[0]))
+    ])
+
+    # Convert the table to a string
+    table_str = table.get_string()
+
+    # Create the title with padding for centering
+    title = "Summary of STB Analysis"
+    table_width = len(table_str.splitlines()[0])
+    title_str = title.center(table_width)
+
+    # Print the title and the table
+    print()
+    print(title_str)
+    print(table_str)
+    print()
+    # Save the table if save is True
+    table_str = title_str + '\n'+ table_str
+    if save:
+        # Convert PrettyTable to DataFrame for HTML saving
+        table_data = {
+            'A0_db': [format_value(A0_db)],
+            'BW': [format_value(BW_3dB)],
+            'GBW': [format_value(abs(GBW))],
+            'PM': [format_value(abs(phase_margin[0]))]
+        }
+        df_table = pd.DataFrame(table_data)
         
+        if html:
+            save_table_html(df_table, output_file)
+        else:
+            save_table_txt(table_str, output_file)
+
+    return {'PM': phase_margin,
+            'A0' : A0_db,
+            'GBW' : GBW }
 
 def op_sim(df, output_file='op_output', html=True, additional_vars=None, custom_expressions=None):
     """

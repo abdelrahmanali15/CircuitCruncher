@@ -117,13 +117,16 @@ def simType(name,plots):
             return b'Operating Point'
         elif name == 'dc':
             return b'DC transfer characteristic'
+        elif name == 'stb':
+            return b'AC Analysis'
         else:
-            raise NotImplementedError(f"Unsupported plot name {name}")
+            pass
 
     idx = 0
-    for plot in plots:
-        idx = idx + 1 
+    for plot in plots: 
         if plot[b'plotname'] == simAlias():
-            return idx - 1
+            return idx 
         else:
-            raise NotImplementedError(f"Unsupported plot name {name}")
+            idx = idx + 1
+    
+    raise NotImplementedError(f"Unsupported plot name {name}")

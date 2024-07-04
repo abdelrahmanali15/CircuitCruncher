@@ -54,6 +54,7 @@ class PlotManager:
         :return: Formatted string representation of the value.
         """
         if np.isnan(val):
+            print('NAN')
             return "NaN"
         abs_val = abs(val)
         for exp, suffix in [(1e12, 'T'), (1e9, 'G'), (1e6, 'M'), (1e3, 'k'),
