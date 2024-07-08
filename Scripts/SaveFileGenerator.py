@@ -3,7 +3,7 @@ import CircuitCruncher as cc
 import sys
 
 # Change this to where you downloaded the repo
-# Todo: Setup repo on device using python3 -m pip install --user -e  and also change lib folder to CircuitCruncher, need to make setup file fore command to work
+# Todo: Setup repo on device using python3 -m pip install --user -e 
 sys.path.append('/home/tare/Repos/CircuitCruncher/CircuitCruncher')
 
 

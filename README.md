@@ -55,8 +55,27 @@ Conda envireoment is not a must, it just makes your life easier when you have to
    ```bash
    conda env create --file environment.yml
    ```
-5. Install jupyter notebook extension on vscode
-6. Open the notebook to view
+5. Install VSCode Extensions
+
+    To work efficiently with Jupyter notebooks and data, install the following extensions in VSCode:
+
+    - **Jupyter Notebook Extension**: This allows you to open and run Jupyter notebooks directly in VSCode.
+    - **Data Wrangler Extension (optional)**: This extension helps with better variable reading and data manipulation.
+
+6. Edit Jupyter Extension Setting to Show Scrollable Outputs
+    Go to file > prefrences > settings. Search for `notebook.output.scrolling` in search bar and enable scrolling.
+
+7. Open the notebook to view
+
+8. To update go to repo directory and pull changes
+```bash 
+git checkout notebook_extratesting
+git pull origin notebook_extratesting
+```
+9. Update dependencies
+```bash
+conda env update --file environment.yml
+```
 
 
 ### Normal Install (Easy)
@@ -82,12 +101,22 @@ python3 -m pip install --user -e
 5. Edit Jupyter Extension Setting to Show Scrollable Outputs
     Go to file > prefrences > settings. Search for `notebook.output.scrolling` in search bar and enable scrolling.
 
-5.  Open the notebook to view
+6.  Open the notebook to view
+
+7. To update go to repo directory and pull changes
+```bash 
+git checkout notebook_extratesting
+git pull origin notebook_extratesting
+```
+8. Update dependencies
+```bash
+python3 -m pip install --user -e 
+```
 ## Usage
 <div class="alert alert-block alert-info">
-<b>Tip:</b>
-Check the Jupyter Notebook for latest documentation
-</div>
+<b>Tip:</b> Check the<a href="post_analysis_notebook.ipynb">Jupyter Notebook</a> for latest documentation</div>
+
+
 
 ### Saving SPICE Variables
 The script `save_spi.py` generates a SPICE save file for specified variables.
