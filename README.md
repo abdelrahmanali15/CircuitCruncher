@@ -47,7 +47,7 @@ Conda envireoment is not a must, it just makes your life easier when you have to
 3. Clone the repository
 
    ```bash
-   git clone https://github.com/abdelrahmanali15/CircuitCruncher/tree/try_notebook
+   git clone https://github.com/abdelrahmanali15/CircuitCruncher/tree/notebook_extratesting
    cd CircuitCruncher
    ```
 4. Create conda enviroment from .yaml file 
