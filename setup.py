@@ -14,7 +14,7 @@ setup(
     install_requires=requirements,
     classifiers=[
         'Programming Language :: Python :: 3',
-        'License :: OSI Approved :: MIT License',
+        'License :: OSI Approved :: Apache v2.0 License',
         'Operating System :: OS Independent',
     ],
     python_requires='>=3.6',
