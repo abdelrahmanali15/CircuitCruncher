@@ -116,6 +116,14 @@ python3 -m pip install --user -e
 <div class="alert alert-block alert-info">
 <b>Tip:</b> Check the<a href="post_analysis_notebook.ipynb">Jupyter Notebook</a> for latest documentation</div>
 
+>
+
+<div class="alert alert-block alert-info">
+<b>Note:</b> You will find various post-analysis scripts in the <a href="Scripts">Scripts</a> folder. Copy what you will use to your simulation directory.
+</div>
+
+
+
 
 
 ### Saving SPICE Variables
