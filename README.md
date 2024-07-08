@@ -34,106 +34,29 @@ This repository contains Python scripts and modules to perform various analyses 
 Conda envireoment is not a must, it just makes your life easier when you have too many projects depending on different versions of libraries.
 </div>
 
- ### Make sure you have conda installed on your system by using this command 
-   ```bash
-   conda info
-   ```
-### Installing Miniconda on Linux
+1.  Make sure you have conda installed on your system by using this command
+    ```bash
+      conda info
+    ``` 
+  
+2. If you don't have conda follow the following guide to install conda on Debian or Ubuntu
 
-Miniconda is a minimal installer for conda, a package manager widely used in data science for managing environments and dependencies. Follow the steps below to install Miniconda on a Linux system.
-
-#### Step 1: Download the Miniconda Installer
-
-1. Open your terminal.
-2. Download the latest Miniconda installer script. You can find the URL for the latest version on the [Miniconda official website](https://docs.conda.io/en/latest/miniconda.html). Use `wget` or `curl` to download the script. For example:
-
-    ```sh
-    wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
-    ```
-
-    Alternatively, using `curl`:
-
-    ```sh
-    curl -O https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
-    ```
-
-#### Step 2: Verify the Installer
-
-(Optional but recommended) Verify the integrity of the downloaded script using SHA-256 checksum:
-
-1. Download the checksum file from the same location:
-
-    ```sh
-    wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh.sha256
-    ```
-
-2. Check the SHA-256 checksum:
-
-    ```sh
-    sha256sum -c Miniconda3-latest-Linux-x86_64.sh.sha256
-    ```
-
-    Ensure that the output states the file is OK.
-
-#### Step 3: Run the Installer
-
-1. Make the downloaded script executable:
-
-    ```sh
-    chmod +x Miniconda3-latest-Linux-x86_64.sh
-    ```
-
-2. Run the installer script:
-
-    ```sh
-    ./Miniconda3-latest-Linux-x86_64.sh
-    ```
-
-3. Follow the prompts in the installer. You can generally accept the default settings. The prompts will include:
-   - Reviewing and accepting the license agreement.
-   - Choosing the installation location (the default is usually fine).
-
-#### Step 4: Initialize Miniconda
-
-1. After the installation is complete, you need to initialize Miniconda. This sets up your shell to use `conda`:
-
-    ```sh
-    conda init
-    ```
-
-2. Close and reopen your terminal or run:
-
-    ```sh
-    source ~/.bashrc
-    ```
-
-#### Step 5: Verify the Installation
-
-To confirm that Miniconda is installed correctly, run:
-
-```sh
-conda --version
-```
-
-You should see the conda version number, indicating that the installation was successful.
+    [Miniconda Install on Debian and Ubuntu](Miniconda_Installer.md)
 
 
-
-By following these steps, you should have Miniconda installed and running on your Linux system, providing you with a robust environment management tool for your projects.
-
-#### Step 6: Clone the repository
+3. Clone the repository
 
    ```bash
    git clone https://github.com/abdelrahmanali15/CircuitCruncher/tree/try_notebook
    cd CircuitCruncher
    ```
-#### Step 7: Create conda enviroment from .yaml file 
-2. Create conda enviroment from .yaml file 
+4. Create conda enviroment from .yaml file 
+ 
    ```bash
    conda env create --file environment.yml
    ```
-#### Step 8: Install jupyter notebook extension on vscode
-#### Step 9: Open the notebook to view
+5. Install jupyter notebook extension on vscode
+6. Open the notebook to view
 
 
 ### Normal Install (Easy)
@@ -149,7 +72,22 @@ cd CircuitCruncher
 ```bash
 python3 -m pip install --user -e 
 ```
+4. Install VSCode Extensions
+
+    To work efficiently with Jupyter notebooks and data, install the following extensions in VSCode:
+
+    - **Jupyter Notebook Extension**: This allows you to open and run Jupyter notebooks directly in VSCode.
+    - **Data Wrangler Extension (optional)**: This extension helps with better variable reading and data manipulation.
+
+5. Edit Jupyter Extension Setting to Show Scrollable Outputs
+    Go to file > prefrences > settings. Search for `notebook.output.scrolling` in search bar and enable scrolling.
+
+5.  Open the notebook to view
 ## Usage
+<div class="alert alert-block alert-info">
+<b>Tip:</b>
+Check the Jupyter Notebook for latest documentation
+</div>
 
 ### Saving SPICE Variables
 The script `save_spi.py` generates a SPICE save file for specified variables.
@@ -398,12 +336,6 @@ Prints the column headers of a DataFrame to see the saved variable names.
 Contributions are welcome! Please submit a pull request or open an issue to discuss your ideas.
 
 ## License
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
-
----
-
-
-## License
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+This project is licensed under the Apache License. See the [LICENSE](LICENSE) file for details.
 
 ---
