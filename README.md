@@ -137,7 +137,18 @@ By following these steps, you should have Miniconda installed and running on you
 
 
 ### Normal Install (Easy)
-
+1. Clone the repo by
+```bash
+git clone https://github.com/abdelrahmanali15/CircuitCruncher/tree/notebook_extratesting
+```
+2. Go to CircuitCruncher folder
+``` bash
+cd CircuitCruncher
+```
+3.  Run command in terminal inside the repo where `setup.py` is located
+```bash
+python3 -m pip install --user -e 
+```
 ## Usage
 
 ### Saving SPICE Variables
