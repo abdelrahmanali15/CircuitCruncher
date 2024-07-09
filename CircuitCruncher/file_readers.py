@@ -1,6 +1,7 @@
 from __future__ import division
 import numpy as np
 import pandas as pd
+import yaml
 
 BSIZE_SP = 512
 MDATA_LIST = [b'title', b'date', b'plotname', b'flags', b'no. variables',
@@ -81,3 +82,51 @@ def get_column_as_array(df: pd.DataFrame, column_name: str) -> np.ndarray:
 
 def view_headers(df: pd.DataFrame):
     print(df.columns)
+
+
+def loadYaml(config_name = 'config.yaml'):    
+    with open(config_name, 'r') as yaml_file:
+        config = yaml.safe_load(yaml_file)
+    return config
+
+
+def loadConfig():
+    config = loadYaml()
+    # Accessing configuration values
+    ngspice_options = config["ngspice"]["options"]
+    sim_output_dir = config["sim"]["dir"]
+    op_raw_file = config["sim"]["op_raw"]
+    ac_raw_file = config["sim"]["ac_raw"]
+    output_dir = config["output"]["dir"]
+
+    op_raw_path = sim_output_dir + '/' + op_raw_file
+    ac_raw_path = sim_output_dir + '/' + ac_raw_file
+
+
+    return {"ngOptions": ngspice_options, 
+            "op_RawPath":op_raw_path,
+            "ac_RawPath" : ac_raw_path,
+            "out_dir": output_dir  }  
+
+
+def simType(name,plots): 
+    def simAlias():
+        if name == 'ac':
+            return b'AC Analysis'
+        elif name == 'op':
+            return b'Operating Point'
+        elif name == 'dc':
+            return b'DC transfer characteristic'
+        elif name == 'stb':
+            return b'AC Analysis'
+        else:
+            pass
+
+    idx = 0
+    for plot in plots: 
+        if plot[b'plotname'] == simAlias():
+            return idx 
+        else:
+            idx = idx + 1
+    
+    raise NotImplementedError(f"Unsupported plot name {name}")

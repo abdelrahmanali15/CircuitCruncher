@@ -4,9 +4,12 @@
 - [Overview](#overview)
 - [Requirements](#requirements)
 - [Installation](#installation)
+  - [Using Conda (Recommended)](#using-conda)
+  - [Normal Install (Easy)](#normal-install-easy)
 - [Usage](#usage)
   - [Operating Point Analysis](#operating-point-analysis)
   - [Saving SPICE Variables](#saving-spice-variables)
+  - [AC Analysis Data Extraction](#ac-analysis-data-extractions)
 - [Library Functions](#library-functions)
 - [Contributing](#contributing)
 - [License](#license)
@@ -24,17 +27,103 @@ This repository contains Python scripts and modules to perform various analyses 
 - PrettyTable
 
 ## Installation
-1. Clone the repository:
+### Using Conda
+<div class="alert alert-block alert-info">
+<b>Tip:</b>
+Conda envireoment is not a must, it just makes your life easier when you have too many projects depending on different versions of libraries.
+</div>
+
+1.  Make sure you have conda installed on your system by using this command
+    ```bash
+      conda info
+    ``` 
+  
+2. If you don't have conda follow the following guide to install conda on Debian or Ubuntu
+
+    [Miniconda Install on Debian and Ubuntu](Miniconda_Installer.md)
+
+
+3. Clone the repository
+
    ```bash
-   git clone https://github.com/abdelrahmanali15/CircuitCruncher
+   git clone https://github.com/abdelrahmanali15/CircuitCruncher/tree/notebook_extratesting
    cd CircuitCruncher
    ```
-2. Install the required packages:
+4. Create conda enviroment from .yaml file 
+ 
    ```bash
-   pip install numpy pandas prettytable
+   conda env create --file environment.yml
    ```
+5. Install VSCode Extensions
 
+    To work efficiently with Jupyter notebooks and data, install the following extensions in VSCode:
+
+    - **Jupyter Notebook Extension**: This allows you to open and run Jupyter notebooks directly in VSCode.
+    - **Data Wrangler Extension (optional)**: This extension helps with better variable reading and data manipulation.
+
+6. Edit Jupyter Extension Setting to Show Scrollable Outputs
+    Go to file > prefrences > settings. Search for `notebook.output.scrolling` in search bar and enable scrolling.
+
+7. Open the notebook to view
+
+8. To update go to repo directory and pull changes
+```bash 
+git checkout notebook_extratesting
+git pull origin notebook_extratesting
+```
+9. Update dependencies
+```bash
+conda env update --file environment.yml
+```
+
+
+### Normal Install (Easy)
+1. Clone the repo by
+```bash
+git clone https://github.com/abdelrahmanali15/CircuitCruncher/tree/notebook_extratesting
+```
+2. Go to CircuitCruncher folder
+``` bash
+cd CircuitCruncher
+```
+3.  Run command in terminal inside the repo where `setup.py` is located
+```bash
+python3 -m pip install --user -e 
+```
+4. Install VSCode Extensions
+
+    To work efficiently with Jupyter notebooks and data, install the following extensions in VSCode:
+
+    - **Jupyter Notebook Extension**: This allows you to open and run Jupyter notebooks directly in VSCode.
+    - **Data Wrangler Extension (optional)**: This extension helps with better variable reading and data manipulation.
+
+5. Edit Jupyter Extension Setting to Show Scrollable Outputs
+    Go to file > prefrences > settings. Search for `notebook.output.scrolling` in search bar and enable scrolling.
+
+6.  Open the notebook to view
+
+7. To update go to repo directory and pull changes
+```bash 
+git checkout notebook_extratesting
+git pull origin notebook_extratesting
+```
+8. Update dependencies
+```bash
+python3 -m pip install --user -e 
+```
 ## Usage
+<div class="alert alert-block alert-info">
+<b>Tip:</b> Check the<a href="post_analysis_notebook.ipynb">Jupyter Notebook</a> for latest documentation</div>
+
+>
+
+<div class="alert alert-block alert-info">
+<b>Note:</b> You will find various post-analysis scripts in the <a href="Scripts">Scripts</a> folder. Copy what you will use to your simulation directory.
+</div>
+
+
+
+
 
 ### Saving SPICE Variables
 The script `save_spi.py` generates a SPICE save file for specified variables.
@@ -115,7 +204,30 @@ if __name__ == '__main__':
   - `.html` file
 ![image](https://github.com/abdelrahmanali15/CircuitCruncher/assets/131778595/3a9b90c1-4330-41cd-8ef1-9dfa2fcea9f6)
    
+### AC Analysis Data Extractions
+The script `ac_analysis.py` performs AC analysis and calculates parameters like bandwidth, gain, and phase margin.
 
+```python
+# ac_analysis.py
+
+from lib import ng_raw_read, to_data_frames, get_column_as_array, measure_ac_parameters, PlotManager
+
+if __name__ == '__main__':
+    AC_simNumber = 0 # assuming that it is the first analysis if you run it after op in the same simulation the change 0 to 1
+    (arrs, plots) = ng_raw_read(ac_raw_path)
+
+    if plots[AC_simNumber][b'plotname'] != b'AC Analysis':
+        raise Exception("This Data Frame doesn't include AC Analysis")
+
+    dfs = to_data_frames((arrs, plots))
+    df = dfs[0]
+
+    # view_headers(df)
+
+    ac_parameters = ac_analysis(df,save=True,output_file=output_dir+'ac_out')
+
+    plt.show()
+```
 
 ## Library Functions
 The `lib` folder contains utility functions for data processing and analysis.
@@ -260,6 +372,6 @@ Prints the column headers of a DataFrame to see the saved variable names.
 Contributions are welcome! Please submit a pull request or open an issue to discuss your ideas.
 
 ## License
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+This project is licensed under the Apache License. See the [LICENSE](LICENSE) file for details.
 
 ---
