@@ -10,7 +10,7 @@ export CONDA_PREFIX="$PWD/conda-env"
 
 # Step 3: Create the conda environment using Micromamba and environment.yaml
 echo "Creating Conda environment..."
-./bin/micromamba create --yes --prefix $CONDA_PREFIX --file environment.yaml
+./bin/micromamba create --yes --prefix $CONDA_PREFIX --file environment.yml
 
 # Step 4: Install additional Python packages if needed
 echo "Installing additional Python packages..."
