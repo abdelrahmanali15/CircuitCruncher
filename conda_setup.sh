@@ -1,8 +1,15 @@
 #!/bin/bash
 
+INSTALL_PATH="/usr/local/bin"
+
 # Step 1: Download and extract Micromamba
 echo "Downloading Micromamba..."
-curl -Ls https://micro.mamba.pm/api/micromamba/linux-64/latest | tar -xj bin/micromamba
+# Download and extract Micromamba
+curl -Ls https://micro.mamba.pm/api/micromamba/linux-64/latest | tar -xj -C "$INSTALL_PATH" bin/micromamba
+
+# Add execute permissions
+chmod +x "$INSTALL_PATH/bin/micromamba"
+
 
 # Step 2: Set up environment variables and paths
 export PATH="$PWD/bin:$PATH"
