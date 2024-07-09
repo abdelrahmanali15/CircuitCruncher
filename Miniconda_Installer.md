@@ -10,7 +10,34 @@ This repository contains a script to set up a conda environment using micromamba
 
 ## Running the Installation Script (1st Method)
 
-1. Clone this repository (skip if already done):
+1. Set Up Environment Variables
+
+You can set up environment variables in your `.bashrc` or system-wide configuration files to ensure Micromamba and your Conda environments are recognized globally.
+
+Edit the `/etc/profile` file (requires sudo):
+
+```bash
+sudo nano /etc/profile
+```
+
+Add the following lines to the end of the file:
+
+```bash
+# Set up Micromamba and Conda environment variables
+export PATH="/usr/local/bin/micromamba:$PATH"
+```
+
+Save the file and exit the text editor.
+
+2. Apply Changes
+
+To apply the changes system-wide without restarting, you can source the `/etc/profile` file:
+
+```bash
+source /etc/profile
+```
+
+3. Clone this repository (skip if already done):
    ```
    git clone https://github.com/abdelrahmanali15/CircuitCruncher
    cd CircuitCruncher
@@ -27,6 +54,13 @@ This repository contains a script to set up a conda environment using micromamba
    ```
    ./conda_setup.sh
    ```
+5. Verify Installation
+
+After completing these steps, you should be able to run Micromamba and its commands from any terminal session:
+
+```bash
+micromamba --version
+```
 
 5. After the script finishes, activate the environment by running the commands printed at the end of the script execution they will be something like this:
    ```
@@ -102,6 +136,24 @@ If you encounter any issues:
 
 For more information on micromamba, visit [https://mamba.readthedocs.io/en/latest/user_guide/micromamba.html](https://mamba.readthedocs.io/en/latest/user_guide/micromamba.html)
 
+To make Micromamba accessible system-wide and set it up so that you can run it from anywhere in your terminal, you can follow these steps:
 
+### 1. Install Micromamba
+
+Download and install Micromamba into a system-wide directory, such as `/usr/local/bin`, which is typically already included in the `PATH` for all users.
+
+```bash
+# Example installation path (adjust as needed)
+INSTALL_PATH="/usr/local/bin"
+
+# Download and extract Micromamba
+curl -Ls https://micro.mamba.pm/api/micromamba/linux-64/latest | tar -xj -C "$INSTALL_PATH" bin/micromamba
+
+# Add execute permissions
+chmod +x "$INSTALL_PATH/bin/micromamba"
+```
+
+
+This setup ensures that Micromamba is accessible system-wide and recognized as a command without needing to specify its full path. Adjust the installation path (`/usr/local/bin` in this example) as necessary based on your system configuration and preferences.
 
 
