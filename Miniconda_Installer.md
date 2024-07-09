@@ -64,7 +64,7 @@ This repository contains a script to set up a conda environment using micromamba
      ```
 
 3. **Install Additional Python Packages:**
-   - You can install any other libraries you want not included in  `environment.yaml`, install them using pip:
+   - You can install any other libraries you want not included in  `environment.yml`, install them using pip:
      ```bash
      ./conda-env/bin/python -m pip install gdstk
      ```
