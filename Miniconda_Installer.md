@@ -60,7 +60,7 @@ This repository contains a script to set up a conda environment using micromamba
      export CONDA_PREFIX="$PWD/conda-env"
      
      # Create the conda environment using Micromamba and the environment.yaml file
-     ./bin/micromamba create --yes --prefix $CONDA_PREFIX --file environment.yaml
+     ./bin/micromamba create --yes --prefix $CONDA_PREFIX --file environment.yml
      ```
 
 3. **Install Additional Python Packages:**
