@@ -46,7 +46,7 @@ Conda envireoment is not a must, it just makes your life easier when you have to
 3. Clone the repository
 
    ```bash
-   git clone https://github.com/abdelrahmanali15/CircuitCruncher/tree/notebook_extratesting
+   git clone https://github.com/abdelrahmanali15/CircuitCruncher
    cd CircuitCruncher
    ```
 4. Create conda enviroment from .yaml file 
@@ -80,7 +80,7 @@ conda env update --file environment.yml
 ### Normal Install (Easy)
 1. Clone the repo by
 ```bash
-git clone https://github.com/abdelrahmanali15/CircuitCruncher/tree/notebook_extratesting
+git clone https://github.com/abdelrahmanali15/CircuitCruncher
 ```
 2. Go to CircuitCruncher folder
 ``` bash
