@@ -25,7 +25,7 @@ This repository contains a script to set up a conda environment using micromamba
 
 4. Run the setup script:
    ```
-   ./setup.sh
+   ./conda_setup.sh
    ```
 
 5. After the script finishes, activate the environment by running the commands printed at the end of the script execution they will be something like this:
