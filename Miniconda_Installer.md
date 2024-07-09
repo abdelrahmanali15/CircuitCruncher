@@ -12,7 +12,7 @@ This repository contains a script to set up a conda environment using micromamba
 
 1. Clone this repository (skip if already done):
    ```
-   git clone https://github.com/abdelrahmanali15/CircuitCruncher/tree/notebook_extratesting
+   git clone https://github.com/abdelrahmanali15/CircuitCruncher
    cd CircuitCruncher
    ```
 
