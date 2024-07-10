@@ -88,9 +88,9 @@ cd CircuitCruncher
 ```
 
 3. Install dependencies
-   ```bash
+```bash
   python3 -m pip install --user -r requirements.txt
-   ```
+  ```
 3.  Run command in terminal inside the repo where `setup.py` is located
 ```bash
 python3 -m pip install --user -e 
