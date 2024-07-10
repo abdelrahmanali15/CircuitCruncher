@@ -86,11 +86,16 @@ git clone https://github.com/abdelrahmanali15/CircuitCruncher
 ``` bash
 cd CircuitCruncher
 ```
+
+3. Install dependencies
+   ```bash
+  python3 -m pip install --user -r requirements.txt
+   ```
 3.  Run command in terminal inside the repo where `setup.py` is located
 ```bash
 python3 -m pip install --user -e 
 ```
-4. Install VSCode Extensions
+4. Install VSCode Extensions (assuming you are working on vscode)
 
     To work efficiently with Jupyter notebooks and data, install the following extensions in VSCode:
 
