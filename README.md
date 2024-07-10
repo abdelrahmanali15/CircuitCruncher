@@ -40,7 +40,7 @@ Conda envireoment is not a must, it just makes your life easier when you have to
   
 2. If you don't have conda follow the following guide to install conda on Debian or Ubuntu
 
-    [Miniconda Install on Debian and Ubuntu](Miniconda_Installer.md)
+    [Anaconda Install on Debian and Ubuntu](https://docs.anaconda.com/anaconda/install/linux/)
 
 
 3. Clone the repository
@@ -93,7 +93,7 @@ cd CircuitCruncher
   ```
 3.  Run command in terminal inside the repo where `setup.py` is located
 ```bash
-python3 -m pip install --user -e 
+python3 -m pip install --user -e .
 ```
 4. Install VSCode Extensions (assuming you are working on vscode)
 
