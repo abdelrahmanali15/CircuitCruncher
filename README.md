@@ -21,7 +21,7 @@ This repository contains Python scripts and modules to perform various analyses 
 - **Plotting Manager**: Abilty to plot easier with main functionalities for easy reuse
 
 ## Requirements
-- Python 3.6+
+- Python 3.8+
 - NumPy
 - Pandas
 - PrettyTable
